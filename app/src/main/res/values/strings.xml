@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">RoomDataBaseExample</string>
+    <string name="app_name">Usuarios</string>
+    <string name="nombre">Nombre</string>
 </resources>

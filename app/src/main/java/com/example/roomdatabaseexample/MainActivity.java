@@ -1,15 +1,15 @@
 package com.example.roomdatabaseexample;
 
 import android.arch.persistence.room.Room;
+import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
 
+import com.example.roomdatabaseexample.Adapters.UserAdapter;
 import com.example.roomdatabaseexample.DataBase.Entities.AppDatabase;
 import com.example.roomdatabaseexample.DataBase.Entities.User;
 
@@ -18,14 +18,11 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText name, lastName;
-    private Button enter, delete;
-    private ListView data;
-    private List<String> userInfo = new ArrayList<>();
-    private ArrayAdapter<String> userArrayAdapter;
+    public static RecyclerView recyclerView;
+    public static UserAdapter userAdapter;
+    private FloatingActionButton fab;
     private AppDatabase db;
-    private static String userData;
-    private List<User> userList;
+    private List<User> thisUsers = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,74 +30,42 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //R
-        name = findViewById(R.id.etName);
-        lastName = findViewById(R.id.etLastName);
-        data = findViewById(R.id.data);
-        enter = findViewById(R.id.enterButton);
-        delete = findViewById(R.id.deleteButton);
+        recyclerView = findViewById(R.id.usersRecyclerView);
+        fab = findViewById(R.id.add);
 
+        //rv
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
+
+        getAllUsers();
+
+        //fab event
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AddUserActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+    }
+
+    public void getAllUsers() {
         //Database
         db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "my_database").allowMainThreadQueries().build();
+        thisUsers = db.userDao().getAll();
 
-        //Listview adapter
-        getUsers();
-
-        //enter users in the db
-        enter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                addUser();
-                userInfo.clear();
-                getUsers();
-
-            }
-        });
-
-        //clean db
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteAllUsers();
-            }
-        });
+        userAdapter = new UserAdapter(thisUsers);
+        recyclerView.setAdapter(userAdapter);
 
     }
 
-    private void addUser() {
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-        User user = new User(0, name.getText().toString(), lastName.getText().toString());
-        db.userDao().insertAll(user);
-
-        //clean edit text
-        name.setText("");
-        lastName.setText("");
+        getAllUsers();
 
     }
-
-    private void deleteAllUsers() {
-
-        db.userDao().deleteAll();
-        userInfo.clear();
-        userArrayAdapter.notifyDataSetChanged();
-
-    }
-
-    private void getUsers() {
-
-        userList = db.userDao().getAll();
-
-        for (User user : userList) {
-
-            userData = user.getFirstName() + " . " + user.getLastName();
-            userInfo.add(userData);
-
-        }
-
-        userArrayAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, userInfo);
-
-        data.setAdapter(userArrayAdapter);
-    }
-
 }
