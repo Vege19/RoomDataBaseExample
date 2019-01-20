@@ -52,6 +52,15 @@
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/editItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_edit_24dp"
+            android:layout_weight="0"
+            android:layout_marginLeft="16dp"
+            android:background="?selectableItemBackground"/>
+
+        <ImageView
             android:id="@+id/deleteItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

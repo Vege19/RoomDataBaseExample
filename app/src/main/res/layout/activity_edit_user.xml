@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -12,7 +11,7 @@
     android:gravity="top|center">
 
     <EditText
-        android:id="@+id/etName"
+        android:id="@+id/editName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
@@ -21,7 +20,7 @@
 
 
     <EditText
-        android:id="@+id/etLastName"
+        android:id="@+id/editLastName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -36,10 +35,10 @@
         android:layout_marginTop="32dp">
 
         <Button
-            android:id="@+id/enterButton"
+            android:id="@+id/saveButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="INGRESAR"
+            android:text="GUARDAR"
             android:layout_gravity="center" />
 
     </LinearLayout>
