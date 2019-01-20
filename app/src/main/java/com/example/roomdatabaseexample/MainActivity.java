@@ -21,13 +21,16 @@ public class MainActivity extends AppCompatActivity {
     public static RecyclerView recyclerView;
     public static UserAdapter userAdapter;
     private FloatingActionButton fab;
-    private AppDatabase db;
-    private List<User> thisUsers = new ArrayList<>();
+    public static AppDatabase db;
+    private static List<User> thisUsers = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Database build
+        db = Room.databaseBuilder(this, AppDatabase.class, "my_database").allowMainThreadQueries().build();
 
         //R
         recyclerView = findViewById(R.id.usersRecyclerView);
@@ -37,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
 
+        //get users
         getAllUsers();
 
         //fab event
@@ -51,15 +55,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void getAllUsers() {
-        //Database
-        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "my_database").allowMainThreadQueries().build();
+    public static void getAllUsers() {
+
+        //set database data in array for recyclerview
         thisUsers = db.userDao().getAll();
 
+        //setting data in rv
         userAdapter = new UserAdapter(thisUsers);
         recyclerView.setAdapter(userAdapter);
 
     }
+
 
     @Override
     protected void onResume() {

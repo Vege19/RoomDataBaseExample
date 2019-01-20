@@ -20,7 +20,6 @@ public class AddUserActivity extends AppCompatActivity {
 
     private EditText name, lastName;
     private Button enter;
-    private AppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +30,6 @@ public class AddUserActivity extends AppCompatActivity {
         name = findViewById(R.id.etName);
         lastName = findViewById(R.id.etLastName);
         enter = findViewById(R.id.enterButton);
-
-        //Database
-        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "my_database").allowMainThreadQueries().build();
 
         //enter users in the db
         enter.setOnClickListener(new View.OnClickListener() {
@@ -52,7 +48,7 @@ public class AddUserActivity extends AppCompatActivity {
     private void addUser() {
 
         User user = new User(0, name.getText().toString(), lastName.getText().toString());
-        db.userDao().insertAll(user);
+        MainActivity.db.userDao().insertAll(user);
 
         //clean edit text
         name.setText("");
